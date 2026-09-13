@@ -18,9 +18,25 @@
       @media (prefers-color-scheme: dark) { body { background: #0f1116; color: #e8eaef; } }
       #mount { width: 360px; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 30px -10px rgb(0 0 0 / 0.4); }
       button { padding: 8px 14px; border-radius: 8px; border: 1px solid currentColor; background: none; color: inherit; font: inherit; cursor: pointer; }
+      .store-copy { display: none; }
+      body.store-shot {
+        grid-template-columns: minmax(0, 1fr) 380px;
+        padding: 64px 120px;
+        background: linear-gradient(135deg, #112fb9, #147ee8);
+        color: #fff;
+      }
+      body.store-shot .store-copy { display: block; max-width: 34rem; }
+      body.store-shot .store-copy h1 { margin: 0 0 18px; font-size: 64px; line-height: 1; }
+      body.store-shot .store-copy p { margin: 0; font-size: 27px; line-height: 1.35; }
+      body.store-shot #mount { width: 360px; }
+      body.store-shot #open-dialog { display: none; }
     </style>
   </head>
   <body>
+    <aside class="store-copy" aria-hidden="true">
+      <h1>QRick</h1>
+      <p>Turn this page into a QR code. Scan it and continue on another device.</p>
+    </aside>
     <div id="mount"></div>
     <button id="open-dialog">Open as the bookmarklet does</button>
     <script type="module" src="./main.ts"></script>

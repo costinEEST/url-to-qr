@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "license": "0BSD",
-  "description": "Turn the page you are on into a QR code \u2014 browser extension and bookmarklet.",
+  "description": "Turn the page you are on into a QR code — browser extension and bookmarklet.",
   "type": "module",
   "packageManager": "npm@12.0.2",
   "engines": {
@@ -14,13 +14,18 @@
     "build": "npm run icons && npm run build:extension && npm run build:bookmarklet",
     "build:extension": "node scripts/build-extension.mjs",
     "build:bookmarklet": "node scripts/build-bookmarklet.mjs",
+    "assets:store": "node scripts/capture-store-assets.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "package": "npm run build && node scripts/build-extension.mjs --zip",
+    "package": "node scripts/package-release.mjs",
+    "release:check": "node scripts/version.mjs --check && npm run verify && npm run package && npm run lint:firefox",
+    "version:set": "node scripts/version.mjs --set",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "smoke": "node scripts/smoke-bookmarklet.mjs",
-    "verify": "npm run typecheck && npm test && npm run build && npm run smoke"
+    "verify": "npm run typecheck && npm test && npm run build && npm run smoke && npm run validate:extension",
+    "validate:extension": "node scripts/validate-extension.mjs",
+    "lint:firefox": "npx --yes web-ext@10.6.0 lint --source-dir dist/extension-firefox --warnings-as-errors"
   },
   "dependencies": {
     "uqr": "^0.1.3"

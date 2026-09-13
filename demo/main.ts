@@ -5,7 +5,14 @@ const style = document.createElement('style')
 style.append(document.createTextNode(panelCss))
 document.head.append(style)
 
-const panel = createPanel({ value: location.href })
+const storeShot = new URLSearchParams(location.search).has('store-shot')
+if (storeShot) document.body.classList.add('store-shot')
+
+const panel = createPanel({
+  value: storeShot
+    ? 'https://example.com/articles/share-this-page?utm_source=newsletter'
+    : location.href,
+})
 document.getElementById('mount')!.append(panel.root)
 
 document.getElementById('open-dialog')!.addEventListener('click', () => {

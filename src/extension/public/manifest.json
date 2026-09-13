@@ -3,6 +3,7 @@
   "name": "QRick",
   "version": "1.0.0",
   "description": "Turn the page you are on into a QR code, then scan it with your phone.",
+  "homepage_url": "https://github.com/costinEEST/url-to-qr",
   "minimum_chrome_version": "153",
   "action": {
     "default_popup": "popup.html",
@@ -20,10 +21,15 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "permissions": ["activeTab"],
+  "permissions": [
+    "activeTab"
+  ],
   "commands": {
     "_execute_action": {
-      "suggested_key": { "default": "Alt+Shift+Q", "mac": "Alt+Shift+Q" },
+      "suggested_key": {
+        "default": "Alt+Shift+Q",
+        "mac": "Alt+Shift+Q"
+      },
       "description": "Open QRick for the current tab"
     }
   }
