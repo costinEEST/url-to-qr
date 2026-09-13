@@ -8,10 +8,13 @@ Turn the current page into a QR code and open it on another device. QRick is ava
 - [Install the bookmarklet](#install-the-bookmarklet)
 - [Install the extension](#install-the-extension)
 - [Local development](#local-development)
+- [Build a release](#build-a-release)
+- [Publish to extension stores](#publish-to-extension-stores)
 - [Implementation](#implementation)
 - [Browser and toolchain targets](#browser-and-toolchain-targets)
 - [Limitations](#limitations)
 - [Privacy and permissions](#privacy-and-permissions)
+- [Changelog](#changelog)
 - [License](#license)
 
 ## Functionality
@@ -64,14 +67,14 @@ The same build is intended for current Chrome, Edge, Brave, Arc, Opera, Vivaldi,
 2. Select **Load Temporary Add-on**.
 3. Choose `dist/extension-firefox/manifest.json`.
 
-Temporary extensions disappear after Firefox restarts. Run `npm run package` to create `dist/qrick-firefox.zip` for signing or store submission.
+Temporary extensions disappear after Firefox restarts. Run `npm run package` to create a versioned Firefox package for signing or store submission.
 
 ### Safari
 
 Safari Web Extensions must be wrapped in an app:
 
 ```bash
-xcrun safari-web-extension-converter dist/extension
+xcrun safari-web-extension-converter dist/extension-safari
 ```
 
 Open the generated Xcode project, run its app, and enable QRick in Safari’s extension settings.
@@ -96,9 +99,57 @@ npm test                # all unit and DOM tests once
 npm run test:watch      # tests in watch mode
 npm run build           # icons, extension variants, and bookmarklet
 npm run smoke           # execute the built bookmarklet in jsdom
-npm run verify          # typecheck, tests, build, and smoke test
-npm run package         # create Chrome and Firefox zip archives
+npm run verify          # typecheck, tests, build, smoke, package invariants
+npm run assets:store    # capture a 1280x800 store screenshot in Chrome
+npm run package         # create browser/source archives and checksums
+npm run release:check   # complete pre-release validation, including AMO lint
 ```
+
+## Build a release
+
+Update every version-bearing file together:
+
+```bash
+npm run version:set -- 1.0.1
+```
+
+Commit the version change, then build and inspect a complete release:
+
+```bash
+npm run release:check
+```
+
+The resulting files are:
+
+```text
+dist/qrick-chrome-v1.0.1.zip
+dist/qrick-firefox-v1.0.1.zip
+dist/qrick-safari-v1.0.1.zip
+dist/qrick-source-v1.0.1.zip
+dist/SHA256SUMS.txt
+```
+
+The source archive lets Mozilla reproduce the minified Firefox package. It contains the locked dependencies, source, tests, configuration, build scripts, privacy policy, and build instructions, without `node_modules`, `.git`, or `dist`.
+
+After verifying the archives, tag the version and push it:
+
+```bash
+git tag v1.0.1
+git push origin main --follow-tags
+```
+
+The tag triggers `.github/workflows/release.yml`, repeats the complete validation on Node 26.8.2, and creates a GitHub Release with all archives and SHA-256 checksums. Normal pushes and pull requests run `.github/workflows/ci.yml`.
+
+## Publish to extension stores
+
+Copy-ready descriptions, privacy answers, permission justifications, and reviewer instructions live in [`store-listing/`](store-listing/). Required and reusable images live in [`store-assets/`](store-assets/). The public [privacy policy](PRIVACY.md) must be available from the repository's default branch before submitting.
+
+- **Chrome Web Store:** upload the versioned Chrome ZIP, complete the listing and Privacy tabs from `store-listing/chrome.md`, and upload the 128 px icon, 1280×800 screenshot, and 440×280 promotional tile.
+- **Firefox Add-ons:** choose a listed release, upload the Firefox ZIP, declare that source is required, and upload the matching source ZIP. The generated manifest declares no data collection and retains a stable Firefox extension ID.
+- **Microsoft Edge Add-ons:** upload the same Chrome ZIP and complete Partner Center using `store-listing/edge.md`.
+- **Safari:** upload the dedicated Safari ZIP to App Store Connect's Safari Web Extension Packager or pass `dist/extension-safari` to `xcrun safari-web-extension-converter`, test through TestFlight, then submit the containing app.
+
+First-time store publication remains manual because each store requires account verification, agreements, listing review, and permanent item IDs. Store-upload automation should only be added after those IDs exist; credentials belong in repository secrets, never in source files.
 
 ## Implementation
 
@@ -109,12 +160,15 @@ bookmarklet/
   install.html              generated drag-and-drop installer
   qrick.bookmarklet.txt     generated copy-and-paste bookmarklet
 demo/                       localhost development page
+store-assets/               store screenshots, promotional artwork, and sources
+store-listing/              copy-ready fields for each extension store
 scripts/                    build, packaging, icon, and smoke-test scripts
 src/
   bookmarklet/              in-page dialog entry point
   core/                     shared QR, URL, panel, and style modules
   extension/                extension popup and manifest
 tests/                      Vitest unit and DOM tests
+PRIVACY.md                  public no-data-collection policy
 ```
 
 The extension and bookmarklet use the same `createPanel()` implementation. The extension supplies the active tab URL; the bookmarklet supplies `location.href` and mounts the panel in a shadow root and native `<dialog>`.
@@ -153,6 +207,10 @@ Source and builds use ESM and an `esnext` compilation target. Older browser vers
 QRick performs QR generation entirely on the device. It sends no URL or text to a server, stores no history, and includes no analytics.
 
 The extension requests only `activeTab`. That temporary permission lets it read the active page URL after the user invokes the extension. It has no host permissions, background service worker, or content script.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## License
 
