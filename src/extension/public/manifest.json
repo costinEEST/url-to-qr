@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "QRick",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turn the page you are on into a QR code, then scan it with your phone.",
   "homepage_url": "https://github.com/costinEEST/url-to-qr",
   "minimum_chrome_version": "153",

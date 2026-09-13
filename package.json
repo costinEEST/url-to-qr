@@ -1,6 +1,6 @@
 {
   "name": "qrick",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "0BSD",
   "description": "Turn the page you are on into a QR code — browser extension and bookmarklet.",

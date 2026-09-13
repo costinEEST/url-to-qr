@@ -212,6 +212,24 @@
 
 .qrick__hint { margin: 8px 0 0; color: var(--q-mute); font-size: 11px; }
 
+/* Firefox for Android opens action popups as full-page extension views. Keep
+   desktop popups compact, but provide comfortable mobile type and tap targets. */
+@media (pointer: coarse) {
+  .qrick {
+    gap: 14px;
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  .qrick__title { font-size: 16px; }
+  .qrick__close { width: 44px; height: 44px; margin: -9px -9px -9px 0; font-size: 20px; }
+  .qrick__input { min-height: 64px; font-size: 14px; }
+  .qrick__status, .qrick__options summary, .qrick__row label, .qrick__switch { font-size: 14px; }
+  .qrick__btn { min-height: 44px; padding: 10px 8px; font-size: 14px; }
+  .qrick__seg label { display: grid; min-width: 44px; min-height: 44px; place-items: center; font-size: 14px; }
+  .qrick__hint { font-size: 13px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .qrick *, .qrick *::before, .qrick *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }

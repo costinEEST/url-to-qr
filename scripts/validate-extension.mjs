@@ -29,6 +29,10 @@ check(
   'Firefox package must declare that it collects no data',
 )
 check(Boolean(firefox.browser_specific_settings?.gecko?.id), 'Firefox package needs a stable ID')
+check(
+  firefox.browser_specific_settings?.gecko_android?.strict_min_version === '155.0',
+  'Firefox package must declare its supported Firefox for Android version',
+)
 check(!('minimum_chrome_version' in firefox), 'Firefox package must omit minimum_chrome_version')
 check(safari.version === packageJson.version, 'Safari and package versions must match')
 check(!('minimum_chrome_version' in safari), 'Safari package must omit minimum_chrome_version')
@@ -41,6 +45,12 @@ for (const directory of [chromeDir, firefoxDir, safariDir]) {
   const files = readdirSync(directory, { recursive: true })
   check(!files.some((file) => String(file).endsWith('.map')), `${directory} contains a source map`)
   const popup = readFileSync(resolve(directory, 'popup.html'), 'utf8')
+  check(
+    /<meta\s+name=["']viewport["']\s+content=["']width=device-width,\s*initial-scale=1["']\s*\/?>/i.test(
+      popup,
+    ),
+    `${directory} must configure the mobile viewport`,
+  )
   check(!/<script(?![^>]*\bsrc=)/i.test(popup), `${directory} contains an inline script`)
   const bundle = readFileSync(resolve(directory, 'popup.js'), 'utf8')
   check(!/\beval\s*\(/.test(bundle), `${directory} contains eval()`)

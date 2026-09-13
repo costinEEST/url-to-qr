@@ -2,6 +2,13 @@
 
 All notable changes to QRick are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.0.1 — 2026-09-13
+
+- Fixed Firefox for Android scaling with an explicit mobile viewport and responsive popup width.
+- Increased type and touch-target sizes on coarse-pointer mobile devices.
+- Declared Firefox 155 as the minimum supported Android version and added release validation for it.
+- Added a Firefox for Android setup, version-discovery, testing, and troubleshooting guide.
+
 ## 1.0.0 — 2026-09-13
 
 - Added the QRick browser extension for current Chromium, Firefox, and Safari.

@@ -7,6 +7,7 @@ Turn the current page into a QR code and open it on another device. QRick is ava
 - [Functionality](#functionality)
 - [Install the bookmarklet](#install-the-bookmarklet)
 - [Install the extension](#install-the-extension)
+- [Test on Firefox for Android](#test-on-firefox-for-android)
 - [Local development](#local-development)
 - [Build a release](#build-a-release)
 - [Publish to extension stores](#publish-to-extension-stores)
@@ -68,6 +69,20 @@ The same build is intended for current Chrome, Edge, Brave, Arc, Opera, Vivaldi,
 3. Choose `dist/extension-firefox/manifest.json`.
 
 Temporary extensions disappear after Firefox restarts. Run `npm run package` to create a versioned Firefox package for signing or store submission.
+
+## Test on Firefox for Android
+
+QRick supports Firefox 155 or newer on Android. See the complete [Firefox for Android testing guide](docs/firefox-android.md) for USB debugging setup, Firefox package and version discovery, temporary installation, reloading, debugging, and troubleshooting commands.
+
+Once the phone is authorized and Firefox Nightly is installed, the usual command is:
+
+```bash
+npx --yes web-ext@latest run \
+  --source-dir dist/extension-firefox \
+  --target firefox-android \
+  --android-device YOUR_DEVICE_ID \
+  --firefox-apk org.mozilla.fenix
+```
 
 ### Safari
 
@@ -184,7 +199,7 @@ The project intentionally targets only current stable desktop browsers as checke
 | Platform | Target |
 | --- | --- |
 | Chrome and Chromium | Chrome 153-equivalent or newer |
-| Firefox | Firefox 155 or newer |
+| Firefox desktop and Android | Firefox 155 or newer |
 | Safari | Safari 26.6 or newer |
 | Node.js | Node.js 26.8.2 or newer |
 | TypeScript | 7.0.2 |

@@ -35,6 +35,9 @@ manifest.browser_specific_settings = {
     strict_min_version: '155.0',
     data_collection_permissions: { required: ['none'] },
   },
+  gecko_android: {
+    strict_min_version: '155.0',
+  },
 }
 writeFileSync(resolve(firefoxDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
 
