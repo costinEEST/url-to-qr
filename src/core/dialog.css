@@ -1,0 +1,14 @@
+:host { all: initial; }
+
+.qrick-dialog {
+  width: min(384px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: 0 10px 40px -8px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(0 0 0 / 0.08);
+  overflow: hidden;
+}
+.qrick-dialog::backdrop { background: rgb(12 14 18 / 0.55); }
+.qrick-dialog > .qrick { border-radius: 14px; }
